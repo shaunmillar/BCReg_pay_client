@@ -35,6 +35,7 @@
 						</goals>
 						<configuration>
 
+							<!--  note that loading this from the spec url doesn't work. Causes the build to run indefinitely -->
 							<inputSpec>${project.basedir}/pay-api-1.0.1.yaml</inputSpec>
 
 							<generatorName>java</generatorName>
