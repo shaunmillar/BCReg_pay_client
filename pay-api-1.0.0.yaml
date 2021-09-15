@@ -258,6 +258,9 @@ paths:
                     updatedBy: BCSC/FYD76WBCNG76CPXBU42HHUA4QPHTIVB5
                     updatedName: BCREGTEST Bena THIRTEEN
                     updatedOn: '2020-09-18T12:51:32.256413+00:00'
+                    details:
+                      - label: 'Incorporation Number : '
+                        value: BC1000000
           headers:
             Access-Control-Allow-Origin:
               schema:
@@ -376,6 +379,9 @@ paths:
                     updatedBy: BCSC/FYD76WBCNG76CPXBU42HHUA4QPHTIVB5
                     updatedName: BCREGTEST Bena THIRTEEN
                     updatedOn: '2020-09-18T12:51:32.256413+00:00'
+                    details:
+                      - label: 'Incorporation Number : '
+                        value: BC1000000
                 /api/v1/payment-requests/2:
                   value:
                     _links:
@@ -401,6 +407,9 @@ paths:
                     updatedBy: BCSC/FYD76WBCNG76CPXBU42HHUA4QPHTIVB5
                     updatedName: BCREGTEST Bena THIRTEEN
                     updatedOn: '2020-09-18T12:51:32.256413+00:00'
+                    details:
+                      - label: 'Incorporation Number : '
+                        value: BC1000001
         '404':
           description: Not Found
           content:
@@ -553,6 +562,9 @@ paths:
                       updatedBy: BCSC/FYD76WBCNG76CPXBU42HHUA4QPHTIVB5
                       updatedName: BCREGTEST Bena THIRTEEN
                       updatedOn: '2020-09-18T12:51:32.256413+00:00'
+                      details:
+                        - label: 'Incorporation Number : '
+                          value: BC1000000
                     invoiceNumber: '21'
                     paymentMethod: Drawdown Payment
                     receiptNumber: '21'
@@ -601,6 +613,9 @@ paths:
                       updatedBy: BCSC/FYD76WBCNG76CPXBU42HHUA4QPHTIVB5
                       updatedName: BCREGTEST Bena THIRTEEN
                       updatedOn: '2020-09-18T12:51:32.256413+00:00'
+                      details:
+                        - label: 'Incorporation Number : '
+                          value: BC1000001
                     invoiceNumber: '22'
                     paymentMethod: Drawdown Payment
                     receiptNumber: '22'
@@ -999,7 +1014,7 @@ paths:
           name: Account-Id
         - schema:
             type: integer
-            default: '1'
+            default: 1
           in: query
           name: page
           description: Page number
@@ -1299,8 +1314,8 @@ paths:
               examples:
                 /api/v1/accounts:
                   value:
-                    authAccountId: 1
-                    authAccountName: tester
+                    auccountId: 1
+                    accountName: tester
                     bcolAccount: null
                     bcolUserId: null
                     billable: true
@@ -1346,8 +1361,8 @@ paths:
               examples:
                 /api/v1/accounts/1:
                   value:
-                    authAccountId: '19'
-                    authAccountName: tester
+                    accountId: '19'
+                    accountName: tester
                     bcolAccount: null
                     bcolUserId: null
                     billable: true
@@ -1379,9 +1394,9 @@ paths:
         required: true
         description: Invoice Identifier
     post:
-      summary: 'Create refund request'
+      summary: Create refund request
       operationId: create_refund
-      tags: 
+      tags:
         - Refunds
       responses:
         '202':
@@ -1425,6 +1440,8 @@ components:
       description: <p>Object to hold tax details. </p>
     Fee:
       type: object
+      title: Fee
+      description: <p> Object to return fee information. </p>
       properties:
         filingTypeCode:
           type: string
@@ -1449,10 +1466,12 @@ components:
         total:
           type: number
           description: Total
-      title: Fee
-      description: <p> Object to return fee information. </p>
+        processingFees:
+          type: number
     PaymentRequest:
       type: object
+      title: Payment Request
+      description: <p>Object to hold payment request details. </p>
       properties:
         filingInfo:
           $ref: '#/components/schemas/FilingInfo'
@@ -1460,11 +1479,18 @@ components:
           $ref: '#/components/schemas/BusinessInfo'
         contactInfo:
           $ref: '#/components/schemas/ContactInfo'
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
       required:
         - filingInfo
         - businessInfo
-      title: Payment Request
-      description: <p>Object to hold payment request details. </p>
     FilingInfo:
       type: object
       properties:
@@ -1598,6 +1624,8 @@ components:
             - PAID
             - DELETED
             - CREATED
+            - APPROVED
+            - COMPLETED
         references:
           type: array
           items:
@@ -1613,6 +1641,26 @@ components:
         isPaymentActionRequired:
           type: boolean
           description: Flag to indicate if a user action/redirection is needed to complete the payment.
+        isOnlineBankingAllowed:
+          type: boolean
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              label:
+                type: string
+              value:
+                type: string
+        paymentAccount:
+          type: object
+          properties:
+            accountId:
+              type: string
+              description: Account ID for the invoice
+            accountName:
+              type: string
+              description: Account Name
     Transaction:
       type: object
       properties:
@@ -1699,6 +1747,10 @@ components:
           type: string
         receiptNumber:
           type: string
+        bcOnlineAccountNumber:
+          type: string
+        paymentMethod:
+          type: string
     TransactionReportQuery:
       title: Transaction Report Query
       type: object
@@ -1733,7 +1785,7 @@ components:
         limit:
           type: integer
           description: number of records to be included
-          default: '10'
+          default: 10
         page:
           type: integer
           description: Current page
@@ -1819,17 +1871,16 @@ components:
           description: Person who initiated refund
       description: Model to store refund details.
   securitySchemes:
-    bearerAuth: 
+    JWT:
       type: http
       scheme: bearer
-      bearerFormat: JWT  
 servers:
   - url: 'https://pay-api.pathfinder.gov.bc.ca'
     description: Prod
   - url: 'https://pay-api-test.pathfinder.gov.bc.ca'
     description: Test
 security:
-  - bearerAuth: []
+  - JWT: []
 tags:
   - name: Fees
   - name: Invoice
@@ -1837,4 +1888,3 @@ tags:
   - name: Transaction Reports
   - name: Accounts
   - name: Refunds
-
