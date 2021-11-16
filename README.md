@@ -14,3 +14,6 @@ mvn clean install package
 ```  
 ## Spec location
 https://raw.githubusercontent.com/bcgov/sbc-pay/main/docs/docs/api_contract/pay-api-1.0.0.yaml
+
+## Current Repo location
+https://github.com/shaunmillar/BCReg_pay_client
