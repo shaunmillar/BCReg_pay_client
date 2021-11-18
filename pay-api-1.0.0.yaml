@@ -1607,6 +1607,8 @@ components:
         createdOn:
           type: string
           description: date made payment
+        updatedOn: 
+          type: string  
         paid:
           type: number
           description: amount paid
@@ -1771,6 +1773,8 @@ components:
           type: number
         receiptDate:
           type: string
+        id: 
+          type: string  
     TransactionReportQuery:
       title: Transaction Report Query
       type: object
