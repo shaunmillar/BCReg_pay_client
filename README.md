@@ -17,3 +17,6 @@ https://raw.githubusercontent.com/bcgov/sbc-pay/main/docs/docs/api_contract/pay-
 
 ## Current Repo location
 https://github.com/shaunmillar/BCReg_pay_client
+
+## Further Information 
+https://bcregistry-demo.apigee.io/docs/payment-proxy/1/types/Invoice
